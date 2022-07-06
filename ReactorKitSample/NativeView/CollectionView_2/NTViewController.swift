@@ -19,7 +19,9 @@ class NTViewController: UIViewController,
                             UITableViewDelegate, UITableViewDataSource {
     let sectionInsets = UIEdgeInsets(top: 10, left: 50, bottom: 10, right: 10)  // 실제로 top만 갖다 씀
     
-    let collectionList = ["매미매매매매매매매매1", "매미2", "매미3", "매미4", "매미5", "매미6" ,"매미7" ,"매미8", "매미9", "매미10", "매미11"]
+    let collectionList = ["전체", "매미", "사마귀", "존나큰사마귀", "개미", "나비"]
+    let tableList: [String] = ["매미1", "사마귀", "매미1", "개미", "나비", "나비1" ,"매미7" ,"매미8", "개미2", "매미10", "매미11"]
+    var filteredList: [String] = [""]
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -64,6 +66,9 @@ class NTViewController: UIViewController,
         tableView.register(NTTableViewCell.self, forCellReuseIdentifier: tableViewReuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
+        
+        //초기값
+        filteredList = tableList
     }
     
     func setupView() {
@@ -110,8 +115,17 @@ class NTViewController: UIViewController,
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let string: String = "kilo selected \(indexPath.row)"
-        
         nameLabel.text = string
+        
+        //array를 바꿔주고 tableView reload
+        if (collectionList[indexPath.row] == "전체") {
+            filteredList = tableList
+        } else {
+            let newList = tableList.filter { $0.contains(tableList[indexPath.row]) }
+            print(newList)
+            filteredList = newList
+        }
+        tableView.reloadData()
     }
     
     // collectionViewCell의 width height를 명시적으로 정함 -> label의 크기만큼 유동적으로 동작하게..
@@ -137,13 +151,12 @@ class NTViewController: UIViewController,
 
     // tableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return filteredList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
-        cell.label.text = "상어 + \(indexPath.row)"
-//        cell.img
+        cell.label.text = filteredList[indexPath.row]
         return cell
     }
 

@@ -20,7 +20,7 @@ class NTViewController: UIViewController,
     let sectionInsets = UIEdgeInsets(top: 10, left: 50, bottom: 10, right: 10)  // 실제로 top만 갖다 씀
     
     let collectionList = ["전체", "매미", "사마귀", "존나큰사마귀", "개미", "나비"]
-    let tableList: [String] = ["매미1", "사마귀", "매미1", "개미", "나비", "나비1" ,"매미7" ,"매미8", "개미2", "매미10", "매미11"]
+    let tableList: [String] = ["매미1", "사마귀", "매미1", "개미", "나비", "나비1" ,"하루살이" ,"매미8", "개미2", "매미10", "매미11"]
     var filteredList: [String] = [""]
     
     private let nameLabel: UILabel = {
@@ -121,10 +121,10 @@ class NTViewController: UIViewController,
         if (collectionList[indexPath.row] == "전체") {
             filteredList = tableList
         } else {
-            let newList = tableList.filter { $0.contains(tableList[indexPath.row]) }
-            print(newList)
+            let newList = tableList.filter { $0.contains(collectionList[indexPath.row]) }
             filteredList = newList
         }
+        print(filteredList)
         tableView.reloadData()
     }
     

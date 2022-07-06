@@ -13,9 +13,10 @@
 		167609F728751C1500C7C6A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 167609F528751C1500C7C6A1 /* Main.storyboard */; };
 		167609F928751C1700C7C6A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 167609F828751C1700C7C6A1 /* Assets.xcassets */; };
 		167609FC28751C1700C7C6A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 167609FA28751C1700C7C6A1 /* LaunchScreen.storyboard */; };
-		16760A0E28751DD700C7C6A1 /* NTViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16760A0D28751DD700C7C6A1 /* NTViewController.swift */; };
-		16760A11287545A200C7C6A1 /* NTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16760A10287545A200C7C6A1 /* NTCollectionViewCell.swift */; };
 		16760A142875536100C7C6A1 /* RKViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16760A132875536100C7C6A1 /* RKViewController.swift */; };
+		16760A18287558C000C7C6A1 /* NTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16760A16287558C000C7C6A1 /* NTCollectionViewCell.swift */; };
+		16760A19287558C000C7C6A1 /* NTViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16760A17287558C000C7C6A1 /* NTViewController.swift */; };
+		16760A1B28755A6500C7C6A1 /* NTTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16760A1A28755A6500C7C6A1 /* NTTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,9 @@
 		16760A0D28751DD700C7C6A1 /* NTViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTViewController.swift; sourceTree = "<group>"; };
 		16760A10287545A200C7C6A1 /* NTCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTCollectionViewCell.swift; sourceTree = "<group>"; };
 		16760A132875536100C7C6A1 /* RKViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RKViewController.swift; sourceTree = "<group>"; };
+		16760A16287558C000C7C6A1 /* NTCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTCollectionViewCell.swift; sourceTree = "<group>"; };
+		16760A17287558C000C7C6A1 /* NTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTViewController.swift; sourceTree = "<group>"; };
+		16760A1A28755A6500C7C6A1 /* NTTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,21 +87,32 @@
 			path = ReactorView;
 			sourceTree = "<group>";
 		};
-		16760A0F2875458E00C7C6A1 /* CollectionView */ = {
+		16760A0F2875458E00C7C6A1 /* CollectionView_1 */ = {
 			isa = PBXGroup;
 			children = (
 				16760A0D28751DD700C7C6A1 /* NTViewController.swift */,
 				16760A10287545A200C7C6A1 /* NTCollectionViewCell.swift */,
 			);
-			path = CollectionView;
+			path = CollectionView_1;
 			sourceTree = "<group>";
 		};
 		16760A122875528900C7C6A1 /* NativeView */ = {
 			isa = PBXGroup;
 			children = (
-				16760A0F2875458E00C7C6A1 /* CollectionView */,
+				16760A152875589800C7C6A1 /* CollectionView_2 */,
+				16760A0F2875458E00C7C6A1 /* CollectionView_1 */,
 			);
 			path = NativeView;
+			sourceTree = "<group>";
+		};
+		16760A152875589800C7C6A1 /* CollectionView_2 */ = {
+			isa = PBXGroup;
+			children = (
+				16760A17287558C000C7C6A1 /* NTViewController.swift */,
+				16760A16287558C000C7C6A1 /* NTCollectionViewCell.swift */,
+				16760A1A28755A6500C7C6A1 /* NTTableViewCell.swift */,
+			);
+			path = CollectionView_2;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,11 +186,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16760A11287545A200C7C6A1 /* NTCollectionViewCell.swift in Sources */,
+				16760A18287558C000C7C6A1 /* NTCollectionViewCell.swift in Sources */,
+				16760A19287558C000C7C6A1 /* NTViewController.swift in Sources */,
+				16760A1B28755A6500C7C6A1 /* NTTableViewCell.swift in Sources */,
 				16760A142875536100C7C6A1 /* RKViewController.swift in Sources */,
 				167609F428751C1500C7C6A1 /* ViewController.swift in Sources */,
 				167609F028751C1500C7C6A1 /* AppDelegate.swift in Sources */,
-				16760A0E28751DD700C7C6A1 /* NTViewController.swift in Sources */,
 				167609F228751C1500C7C6A1 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

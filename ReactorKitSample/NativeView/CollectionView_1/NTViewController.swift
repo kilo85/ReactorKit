@@ -10,7 +10,7 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class NTViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class NTViewController_1: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Native ViewController kilo1"
@@ -67,7 +67,7 @@ class NTViewController: UIViewController, UICollectionViewDelegate, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! NTCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! NTCollectionViewCell_1
 
         cell.imageView.image = UIImage(systemName: "heart")
 

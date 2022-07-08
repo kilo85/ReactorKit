@@ -23,15 +23,15 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        let vc = NTViewController() // 1. Native ViewController
-        let vc = RKViewController() // 2. ReactorKit ViewController
+        let vc = NTViewController() // 1. Native ViewController
+//        let vc = RKViewController() // 2. ReactorKit ViewController
 
         self.present(vc, animated: true)
     }
     
     @IBAction func clickButton(_ sender: Any) {
-//        let vc = NTViewController() // 1. Native ViewController
-        let vc = RKViewController() // 2. ReactorKit ViewController
+        let vc = NTViewController() // 1. Native ViewController
+//        let vc = RKViewController() // 2. ReactorKit ViewController
         
         self.present(vc, animated: true)
     }

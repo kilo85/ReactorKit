@@ -11,15 +11,54 @@
 import Foundation
 import UIKit
 
+class SectionItem {
+    var name1: String = "A"
+    var showsSelf1: Bool = true
+    var showsContents1: Bool = true
+    var items1: [Item] = [Item]()
+    
+    init(_ items: [Item]?) {
+        if let items = items { self.items1 = items }
+    }
+   
+    func changeVisiblity(section: Int) -> [IndexPath] {
+        showsContents1.toggle()
+        items1.forEach { $0.showsSelf = showsContents1 }
+        return items1.enumerated().map { IndexPath(row: $0.offset, section: section) }
+    }
+}
+
+class Item {
+    var name: String = "A"
+    var showsSelf: Bool = true
+    var showsContents: Bool = true
+    var items: [Item] = [Item]()
+    
+    init(name : String) {
+        self.name = name
+    }
+   
+    func changeVisiblity(section: Int) -> [IndexPath] {
+        showsContents.toggle()
+        items.forEach { $0.showsSelf = showsContents }
+        return items.enumerated().map { IndexPath(row: $0.offset, section: section) }
+    }
+}
+
 private let collectionViewReuseIdentifier = "CollectionViewCell"
 private let tableViewReuseIdentifier = "TableViewCell"
+private let headerReuseIdentifier = "Header"
+private let footerReuseIdentifier = "Footer"
 
-class NTViewController_2: UIViewController,
-                            UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
-                            UITableViewDelegate, UITableViewDataSource {
+class NTViewController: UIViewController {
     let sectionInsets = UIEdgeInsets(top: 10, left: 50, bottom: 10, right: 10)  // 실제로 top만 갖다 씀
     
     let collectionList = ["전체", "매미", "사마귀", "존나큰사마귀", "개미", "나비"]
+    
+    var dArray = [SectionItem([Item(name: "매미1"), Item(name: "사마귀"), Item(name: "매미1"), Item(name: "개미")]),
+                  SectionItem([Item(name: "나비"), Item(name: "나비1"), Item(name: "하루살이"), Item(name: "매미8")]),
+                  SectionItem([Item(name: "개미2"), Item(name: "매미10"), Item(name: "none")])]
+    
     let tableList: [String] = ["매미1", "사마귀", "매미1", "개미", "나비", "나비1" ,"하루살이" ,"매미8", "개미2", "매미10", "매미11"]
     var filteredList: [String] = [""]
     
@@ -64,11 +103,49 @@ class NTViewController_2: UIViewController,
         collectionView.dataSource = self
         
         tableView.register(NTTableViewCell.self, forCellReuseIdentifier: tableViewReuseIdentifier)
+        tableView.register(SectionHeader.self, forHeaderFooterViewReuseIdentifier: headerReuseIdentifier)
+        tableView.register(SectionFooter.self, forHeaderFooterViewReuseIdentifier: footerReuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
         
         //초기값
         filteredList = tableList
+        
+        
+//        tableView.rowHeight = UITableView.automaticDimension
+//        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        
+        // 전체 tableView에 대한 Header, Footer
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        let footer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        
+        header.backgroundColor = .systemOrange
+        footer.backgroundColor = .systemTeal
+        
+        let headerButton = UIButton(frame: header.bounds)
+        headerButton.setTitle("Header", for: .normal)
+        headerButton.titleLabel?.textAlignment = .center
+        header.addSubview(headerButton)
+        headerButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        
+        let footerLabel = UILabel(frame: footer.bounds)
+        footerLabel.text = "Footer"
+        footerLabel.textAlignment = .center
+        footer.addSubview(footerLabel)
+        
+        tableView.tableHeaderView = header
+        tableView.tableFooterView = footer
+
+    }
+    
+    func getSection(header: UITableViewHeaderFooterView) -> Int? {
+        let point = CGPoint(x: header.frame.midX, y: header.frame.midY)
+        for s in 0 ..< dArray.count {
+            if tableView.rectForHeader(inSection: s).contains(point) {
+                return s
+            }
+        }
+        return nil
     }
     
     func setupView() {
@@ -99,7 +176,21 @@ class NTViewController_2: UIViewController,
         ])
         tableView.translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    @objc func buttonTapped() {
+        print("kilo1 buttonTapped")
+//        guard let section = getSection(header: header) else { return }
+        let section = 0
+        let _ = dArray[section].changeVisiblity(section: section)
+        
+        // ここでアニメーション変えてみて
+        tableView.reloadSections(IndexSet(integer: section), with: .automatic)
+    }
 
+}
+
+extension NTViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     // collectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionList.count
@@ -149,15 +240,63 @@ class NTViewController_2: UIViewController,
         
     }
 
+}
+
+extension NTViewController: UITableViewDataSource, UITableViewDelegate {
     // tableView
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredList.count
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // TODO : 왜 5번이나 호출되지??
+        let count = dArray.count
+        print("kilo1 section count : \(count)")
+        return count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
-        cell.label.text = filteredList[indexPath.row]
-        return cell
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("kilo1 numberOfRowsInSection : \(section)")
+//        let count = dArray[section].items.filter{ $0.showsSelf == true }.count
+//        let count = dArray[section].items.count
+        let count = dArray[section].items1.filter{ $0.showsSelf == true }.count
+        print("kilo1 rows count : \(count)")
+        return count
     }
 
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier) as! SectionHeader
+        header.textLabel?.text = dArray[section].name1
+
+        return header
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        
+        let view: UIView = {
+            let v = UIView(frame: .zero)
+            v.backgroundColor = .brown
+            
+            return v
+        }()
+        
+        header.textLabel?.textAlignment = .center
+        header.textLabel?.textColor = .systemBlue
+        header.backgroundView = view
+            
+    }
+
+    
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return filteredList.count
+//    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("kilo1 cellforRow : \(indexPath.section) , \(indexPath.row)")
+        
+//        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
+//        cell.label.text = filteredList[indexPath.row]
+//        return cell
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
+        cell.setValueToCell(str: String(format: "%2d", indexPath.section) + " " + String(format: "%2d", indexPath.row))
+        return cell
+    }
 }

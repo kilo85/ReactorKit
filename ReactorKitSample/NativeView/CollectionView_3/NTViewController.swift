@@ -55,12 +55,12 @@ class NTViewController: UIViewController {
     
     let collectionList = ["전체", "매미", "사마귀", "존나큰사마귀", "개미", "나비"]
     
-    var dArray = [SectionItem([Item(name: "매미1"), Item(name: "사마귀"), Item(name: "매미1"), Item(name: "개미")]),
-                  SectionItem([Item(name: "나비"), Item(name: "나비1"), Item(name: "하루살이"), Item(name: "매미8")]),
-                  SectionItem([Item(name: "개미2"), Item(name: "매미10"), Item(name: "none")])]
+//    var dArray = [SectionItem([Item(name: "매미1"), Item(name: "사마귀1"), Item(name: "하루살이1"), Item(name: "개미1")]),
+//                  SectionItem([Item(name: "매미2"), Item(name: "사마귀2"), Item(name: "하루살이2"), Item(name: "매미8")]),
+//                  SectionItem([Item(name: "매미3"), Item(name: "사마귀3"), Item(name: "하루살이3")])]
     
-    let tableList: [String] = ["매미1", "사마귀", "매미1", "개미", "나비", "나비1" ,"하루살이" ,"매미8", "개미2", "매미10", "매미11"]
-    var filteredList: [String] = [""]
+    var dArray: [SectionItem] = []
+    var filteredList: [SectionItem] = []
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -90,6 +90,12 @@ class NTViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //data 초기화
+        dArray.append(SectionItem([Item(name: "매미1"), Item(name: "사마귀1"), Item(name: "하루살이1"), Item(name: "개미1")]))
+        dArray.append(SectionItem([Item(name: "매미2"), Item(name: "사마귀2"), Item(name: "하루살이2"), Item(name: "개미2")]))
+        dArray.append(SectionItem([Item(name: "매미3"), Item(name: "사마귀3"), Item(name: "하루살이3"), Item(name: "개미3")]))
+        dArray.append(SectionItem([Item(name: "매미4"), Item(name: "사마귀4"), Item(name: "바퀴벌레4")]))
+        
         //self 생략 가능
         view.backgroundColor = UIColor.white
         view.addSubview(nameLabel)
@@ -109,7 +115,7 @@ class NTViewController: UIViewController {
         tableView.dataSource = self
         
         //초기값
-        filteredList = tableList
+        filteredList = dArray
         
         
 //        tableView.rowHeight = UITableView.automaticDimension
@@ -138,6 +144,8 @@ class NTViewController: UIViewController {
 
     }
     
+    
+    //미사용
     func getSection(header: UITableViewHeaderFooterView) -> Int? {
         let point = CGPoint(x: header.frame.midX, y: header.frame.midY)
         for s in 0 ..< dArray.count {
@@ -189,9 +197,9 @@ class NTViewController: UIViewController {
 
 }
 
+// collectionViewDateSource
 extension NTViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    // collectionView
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionList.count
     }
@@ -210,12 +218,29 @@ extension NTViewController: UICollectionViewDelegate, UICollectionViewDataSource
         
         //array를 바꿔주고 tableView reload
         if (collectionList[indexPath.row] == "전체") {
-            filteredList = tableList
+            for i in 0 ..< dArray.count {
+                for j in 0 ..< dArray[i].items1.count {
+                    dArray[i].items1[j].showsSelf = true //조건 돌때마다 true
+                }
+            }
         } else {
-            let newList = tableList.filter { $0.contains(collectionList[indexPath.row]) }
-            filteredList = newList
+            let searchString = collectionList[indexPath.row]
+            
+//            for문을 돌려서
+            for i in 0 ..< dArray.count {
+                for j in 0 ..< dArray[i].items1.count {
+                    dArray[i].items1[j].showsSelf = true //조건 돌때마다 true
+                    
+                    print("kilo1 searchString : \(searchString)")
+                    print("kilo1 name1 : \(dArray[i].items1[j].name)")
+                    if (!dArray[i].items1[j].name.contains(searchString)) {
+                        // 포함하지 않으면 false
+                        dArray[i].items1[j].showsSelf = false
+                    }
+                }
+            }
         }
-        print(filteredList)
+        filteredList = dArray
         tableView.reloadData()
     }
     
@@ -242,8 +267,9 @@ extension NTViewController: UICollectionViewDelegate, UICollectionViewDataSource
 
 }
 
+// TableViewDateSource
 extension NTViewController: UITableViewDataSource, UITableViewDelegate {
-    // tableView
+
     func numberOfSections(in tableView: UITableView) -> Int {
         // TODO : 왜 5번이나 호출되지??
         let count = dArray.count
@@ -252,11 +278,8 @@ extension NTViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("kilo1 numberOfRowsInSection : \(section)")
-//        let count = dArray[section].items.filter{ $0.showsSelf == true }.count
-//        let count = dArray[section].items.count
         let count = dArray[section].items1.filter{ $0.showsSelf == true }.count
-        print("kilo1 rows count : \(count)")
+//        let count = dArray[section].items1.count
         return count
     }
 
@@ -282,21 +305,13 @@ extension NTViewController: UITableViewDataSource, UITableViewDelegate {
         header.backgroundView = view
             
     }
-
-    
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return filteredList.count
-//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("kilo1 cellforRow : \(indexPath.section) , \(indexPath.row)")
-        
-//        let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
-//        cell.label.text = filteredList[indexPath.row]
-//        return cell
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
-        cell.setValueToCell(str: String(format: "%2d", indexPath.section) + " " + String(format: "%2d", indexPath.row))
+        cell.setValueToCell(str: filteredList[indexPath.section].items1[indexPath.row].name)
+
         return cell
     }
 }

@@ -12,12 +12,13 @@ import Foundation
 import UIKit
 
 class SectionItem {
-    var name1: String = "A"
+    var sectionName: String = "A"
     var showsSelf1: Bool = true
     var showsContents1: Bool = true
     var items1: [Item] = [Item]()
     
-    init(_ items: [Item]?) {
+    init(sectionName:String, items: [Item]?) {
+        self.sectionName = sectionName
         if let items = items { self.items1 = items }
     }
    
@@ -91,10 +92,10 @@ class NTViewController: UIViewController {
         super.viewDidLoad()
         
         //data 초기화
-        dArray.append(SectionItem([Item(name: "매미1"), Item(name: "사마귀1"), Item(name: "하루살이1"), Item(name: "개미1")]))
-        dArray.append(SectionItem([Item(name: "매미2"), Item(name: "사마귀2"), Item(name: "하루살이2"), Item(name: "개미2")]))
-        dArray.append(SectionItem([Item(name: "매미3"), Item(name: "사마귀3"), Item(name: "하루살이3"), Item(name: "개미3")]))
-        dArray.append(SectionItem([Item(name: "매미4"), Item(name: "사마귀4"), Item(name: "바퀴벌레4")]))
+        dArray.append(SectionItem(sectionName: "섹션1", items: [Item(name: "매미1"), Item(name: "사마귀1"), Item(name: "하루살이1"), Item(name: "개미1")]))
+        dArray.append(SectionItem(sectionName: "섹션2", items: [Item(name: "매미2"), Item(name: "사마귀2"), Item(name: "하루살이2"), Item(name: "개미2")]))
+        dArray.append(SectionItem(sectionName: "섹션3", items: [Item(name: "매미3"), Item(name: "사마귀3"), Item(name: "하루살이3"), Item(name: "개미3")]))
+        dArray.append(SectionItem(sectionName: "섹션4", items: [Item(name: "매미4"), Item(name: "사마귀4"), Item(name: "바퀴벌레4")]))
         
         //self 생략 가능
         view.backgroundColor = UIColor.white
@@ -285,7 +286,7 @@ extension NTViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier) as! SectionHeader
-        header.textLabel?.text = dArray[section].name1
+        header.textLabel?.text = dArray[section].sectionName
 
         return header
     }
@@ -312,6 +313,8 @@ extension NTViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: tableViewReuseIdentifier, for: indexPath) as! NTTableViewCell
         cell.setValueToCell(str: filteredList[indexPath.section].items1[indexPath.row].name)
 
+        // 필터된 string을 처리하려면 진짜 필터 된 filterList가 필요하다
+        
         return cell
     }
 }
